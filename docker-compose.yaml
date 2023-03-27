@@ -1,0 +1,18 @@
+version: '3.5'
+
+services:
+  go:
+    image: openapitools/openapi-generator-cli:v6.0.1
+    volumes:
+      - .:/work
+    working_dir: /work
+    command: >
+      sh -c '
+        rm -rf /work/generated/*
+        docker-entrypoint.sh generate \
+        --generator-name go-server \
+        --input-spec /work/test.yaml \
+        --config /work/config.yaml \
+        --output /work/generated \
+        --additional-properties enumClassPrefix=true
+      '

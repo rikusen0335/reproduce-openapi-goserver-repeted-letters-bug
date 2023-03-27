@@ -1,0 +1,193 @@
+openapi: 3.0.0
+info:
+  title: test
+  version: "1.0"
+servers:
+- url: http://localhost:3000
+paths:
+  /users/{userId}:
+    get:
+      description: Retrieve the information of the user with the matching user ID.
+      operationId: get-users-userId
+      parameters:
+      - description: Id of an existing user.
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: User Found
+        "404":
+          description: User Not Found
+      summary: Get User Info by User ID
+      tags: []
+    patch:
+      description: Update the information of an existing user.
+      operationId: patch-users-userId
+      parameters:
+      - description: Id of an existing user.
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/patch_users_userId_request'
+        description: Patch user properties to update.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: User Updated
+        "404":
+          description: User Not Found
+        "409":
+          description: Email Already Taken
+      summary: Update User Information
+  /user:
+    post:
+      description: Create a new user.
+      operationId: post-user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/post_user_request'
+        description: Post the necessary fields for the API to create a new user.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: User Created
+        "400":
+          description: Missing Required Information
+        "409":
+          description: Email Already Taken
+      summary: Create New User
+components:
+  schemas:
+    User:
+      description: ""
+      example:
+        firstName: firstName
+        lastName: lastName
+        emailVerified: true
+        dateOfBirth: 1997-10-31T00:00:00.000+00:00
+        id: 0
+        email: email
+        createDate: 2000-01-23
+      properties:
+        id:
+          description: Unique identifier for the given user.
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          format: email
+          type: string
+        dateOfBirth:
+          example: 1997-10-31
+          format: date
+          type: string
+        emailVerified:
+          description: Set to true if the user's email has been verified.
+          type: boolean
+        createDate:
+          description: The date that the user was created.
+          format: date
+          type: string
+      required:
+      - email
+      - emailVerified
+      - firstName
+      - id
+      - lastName
+      title: User
+      type: object
+      x-examples:
+        Alice Smith:
+          id: 142
+          firstName: Alice
+          lastName: Smith
+          email: alice.smith@gmail.com
+          dateOfBirth: 1997-10-31
+          emailVerified: true
+          signUpDate: 2019-08-24
+    GGGDeveloper:
+      properties:
+        id:
+          type: string
+      title: GGGDeveloper
+      type: object
+      x-stoplight:
+        id: a11msaxcbij2v
+    GGGScopeEnum:
+      enum:
+      - foo
+      - bar
+      title: GGGScopeEnum
+      type: string
+      x-stoplight:
+        id: yb75c8ocnu8bx
+    NFTMonster:
+      properties:
+        scope:
+          $ref: '#/components/schemas/GGGDeveloper'
+      type: object
+    patch_users_userId_request:
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          description: "If a new email is given, the user's email verified property\
+            \ will be set to false."
+          type: string
+        dateOfBirth:
+          type: string
+        scope:
+          allOf:
+          - $ref: '#/components/schemas/GGGScopeEnum'
+          nullable: true
+          x-stoplight:
+            id: 6sfvdvh4kn8if
+      type: object
+    post_user_request:
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        dateOfBirth:
+          format: date
+          type: string
+      required:
+      - dateOfBirth
+      - email
+      - firstName
+      - lastName
+      type: object
+x-stoplight:
+  id: zifvr6s124si6

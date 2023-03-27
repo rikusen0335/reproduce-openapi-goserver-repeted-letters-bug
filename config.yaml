@@ -1,0 +1,4 @@
+# see: https://openapi-generator.tech/docs/generators/go-server/
+
+featureCORS: true
+
